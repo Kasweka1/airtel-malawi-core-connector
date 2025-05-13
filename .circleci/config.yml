@@ -1,14 +1,24 @@
+# CircleCI configuration file
 version: 2.1
 
 jobs:
-  hello-job:
+  # Job one with a unique name
+  connector_greeting:
     docker:
-      - image: cimg/node:17.2.0 # the primary container, where your job's commands are run
+     - image: cimg/base:2022.05
     steps:
-      - checkout # check out the code in the project directory
-      - run: echo "hello malawi core connector" # run the `echo` command
+      - run: echo "Malawi Connector Greeting"
+  # Job two with a unique name
+  connector_goodbye:
+    docker:
+     - image: cimg/base:2022.05
+    steps:
+      - run: echo "Malawi Connector Goodbye"
 
 workflows:
-  my-workflow:
+  # Name of workflow
+  hello_and_goodbye:
+    # List of jobs that will run
     jobs:
-      - hello-job
+      - connector_greeting
+      - connector_goodbye
