@@ -11,8 +11,8 @@ workflows:
       - build/setup:
           name: Setup
           context: org-global
-      - build/test_lint:
+      - build/test_dependencies:
+          name: Dependencies
           requires:
-            - build/setup
-
+            - Setup
           
