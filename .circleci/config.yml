@@ -19,12 +19,31 @@ workflows:
     jobs:
       - build/setup:
           name: Setup
+          filters: &setup-filter
+            branches:
+              only:
+                - /feature/*
+                - /bugfix/*
+            tags:  &setup-tags
+              only: /v\d+(\.\d+){2}(-[a-zA-Z-][0-9a-zA-Z-]*\.\d+)?/
           context: org-global
+
       - build/test_dependencies:
           name: Dependencies
+          filters:
+            branches:
+              only:
+                - main
+                - master
           requires:
             - Setup
       - build/test_deprecations:
           name: Deprecations
+          filters: *setup-filter
+          requires:
+            - Setup
+      - build/test_lint: &test-condition
+          name: Lint
+          filters: *setup-filter
           requires:
             - Setup
