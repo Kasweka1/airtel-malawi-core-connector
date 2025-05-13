@@ -6,7 +6,16 @@ setup: true
 orbs:
   build: mojaloop/build@1.0.64
 workflows:
-  setup:
+  checks:
+    jobs:
+      - build/pr_title_check:
+          name: PR title
+          filters:
+            branches:
+              ignore:
+                - main
+                - master
+  build_and_test:
     jobs:
       - build/setup:
           name: Setup
@@ -15,4 +24,7 @@ workflows:
           name: Dependencies
           requires:
             - Setup
-          
+      - build/test_deprecations:
+          name: Deprecations
+          requires:
+            - Setup
