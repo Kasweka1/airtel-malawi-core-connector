@@ -1,60 +1,14 @@
-# This config was automatically generated from your source code
-# Stacks detected: deps:node:.,test:jest:
 version: 2.1
-orbs:
-  node: circleci/node@5
+
 jobs:
-  test-node:
-    # Install node dependencies and run tests
-    executor: node/default
-    environment:
-      JEST_JUNIT_OUTPUT_DIR: ./test-results/
-    steps:
-      - checkout
-      - node/install-packages:
-          pkg-manager: npm
-      - run:
-          command: npm install jest-junit
-      - run:
-          name: Run tests
-          command: npm run test --ci --runInBand --reporters=default --reporters=jest-junit
-      - store_test_results:
-          path: ./test-results/
-  build-node:
-    # Build node project
-    executor: node/default
-    steps:
-      - checkout
-      - node/install-packages:
-          pkg-manager: npm
-      - run:
-          command: npm run build
-      - run:
-          name: Create the ~/artifacts directory if it doesn't exist
-          command: mkdir -p ~/artifacts
-      # Copy output to artifacts dir
-      - run:
-          name: Copy artifacts
-          command: cp -R build dist public .output .next .docusaurus ~/artifacts 2>/dev/null || true
-      - store_artifacts:
-          path: ~/artifacts
-          destination: node-build
-  deploy:
-    # This is an example deploy job, not actually used by the workflow
+  hello-job:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/node:17.2.0 # the primary container, where your job's commands are run
     steps:
-      # Replace this with steps to deploy to users
-      - run:
-          name: deploy
-          command: '#e.g. ./deploy.sh'
+      - checkout # check out the code in the project directory
+      - run: echo "hello world" # run the `echo` command
+
 workflows:
-  build-and-test:
+  my-workflow:
     jobs:
-      - test-node
-      - build-node:
-          requires:
-            - test-node
-    # - deploy:
-    #     requires:
-    #       - build-node
+      - hello-job
