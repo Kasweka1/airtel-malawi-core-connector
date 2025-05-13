@@ -49,6 +49,4 @@ workflows:
             - Setup
       - build/test_unit:
           name: Unit
-          requires:
-            - Setup
       
