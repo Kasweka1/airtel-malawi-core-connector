@@ -6,10 +6,10 @@ setup: true
 orbs:
   build: mojaloop/build@1.0.64
 workflows:
-  setup:
+  test-build:
     jobs:
-      - build/test_lint:
-          name: Run ESLint
-          yarn_lock: "true"
+      - build/build_local:
+          name: Build
+          context: org-global
 
           
