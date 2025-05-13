@@ -21,7 +21,7 @@ workflows:
           name: Setup
           filters: &setup-filter
             branches:
-              only:
+              ignore:
                 - /feature/*
                 - /bugfix/*
             tags:  &setup-tags
@@ -32,7 +32,7 @@ workflows:
           name: Dependencies
           filters:
             branches:
-              only:
+              ignore:
                 - main
                 - master
           requires:
