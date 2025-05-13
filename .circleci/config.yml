@@ -2,12 +2,14 @@
 # Mojaloop build Orb
 version: 2.1
 
+setup: true
 orbs:
   build: mojaloop/build@1.0.64
-
 workflows:
   setup:
     jobs:
       - build/test_lint:
-          context: org-global
+          name: Run ESLint
+          yarn_lock: "true"
+
           
