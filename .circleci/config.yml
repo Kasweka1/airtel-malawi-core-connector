@@ -47,3 +47,6 @@ workflows:
           filters: *setup-filter
           requires:
             - Setup
+      - build/test_unit:
+          name: Unit
+      
