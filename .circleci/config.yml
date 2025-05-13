@@ -51,4 +51,12 @@ workflows:
           name: Unit
           requires:
             - Setup
+      - build/build_local:
+          name: Build
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - Setup
       
