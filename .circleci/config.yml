@@ -1,5 +1,5 @@
 # CircleCI configuration file
-# Mojaloop build Orb
+
 version: 2.1
 
 # setup: true
@@ -123,5 +123,14 @@ workflows:
           requires:
             - Unit tests
             - Lint
+          context: org-global
+      - build/github_release:
+          name: GitHub Release
+          requires:
+            - Release
+          filters:
+            branches:
+               ignore:
+                - /.*/
           context: org-global
       
