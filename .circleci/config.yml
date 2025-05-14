@@ -7,6 +7,71 @@ orbs:
   build: mojaloop/build@1.0.64
 
 jobs:
+  github_release:
+    description: "This job creates a GitHub release for the project."
+    machine: true
+    shell: /bin/bash -eo pipefail
+    environment:
+      MAIN_BRANCH_NAME: main
+    parameters:
+      slack:
+        type: string
+        default: ''
+    steps:
+      - run:
+          name: Install Git
+          command: |
+            sudo apt-get update && sudo apt-get install -y git
+      - checkout
+      - run:
+          name: Install GitHub CLI
+          command: |
+            type -p gh >/dev/null || (
+              curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg &&
+              sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg &&
+              echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" |
+              sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null &&
+              sudo apt update &&
+              sudo apt install gh -y
+            )
+      - run:
+          name: Configure Git
+          command: |
+            git config --global user.email "ci@example.com"
+            git config --global user.name "CircleCI"
+      - run:
+          name: Fetch release branch
+          command: |
+            git fetch origin
+            git checkout origin/${CIRCLE_BRANCH}
+      - run:
+          name: Extract version from package (mocked)
+          command: |
+            echo 'RELEASE_TAG=1.2.3' >> $BASH_ENV
+            echo 'RELEASE_CHANGES="Minor bug fixes and improvements."' >> $BASH_ENV
+      - run:
+          name: Check the release changes
+          command: |
+            echo "Changes are: ${RELEASE_CHANGES}"
+      - run:
+          name: Setup Slack config
+          command: |
+            echo "export SLACK_PROJECT_NAME=${CIRCLE_PROJECT_REPONAME}" >> $BASH_ENV
+            echo "export SLACK_RELEASE_TYPE='Github Release'" >> $BASH_ENV
+            echo "export SLACK_RELEASE_TAG=v${RELEASE_TAG}" >> $BASH_ENV
+            echo "export SLACK_RELEASE_URL=https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/v${RELEASE_TAG}" >> $BASH_ENV
+            echo "export SLACK_BUILD_ID=${CIRCLE_BUILD_NUM}" >> $BASH_ENV
+            echo "export SLACK_CI_URL=${CIRCLE_BUILD_URL}" >> $BASH_ENV
+      - run:
+          name: Create Release
+          command: |
+            gh release create "v${RELEASE_TAG}" \
+              --repo ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} \
+              --title "v${RELEASE_TAG} Release" \
+              --draft=false \
+              --notes "${RELEASE_CHANGES}" \
+              ./CHANGELOG.md
+
   build_local_fixed:
     description: Builds a local Docker image of the project (patched version)
     machine: true
@@ -89,20 +154,24 @@ workflows:
                 - master
           requires:
             - Setup
+
       - build/test_deprecations:
           name: Deprecations
           filters: *setup-filter
           requires:
             - Setup
+
       - build/test_lint: &test-condition
           name: Lint
           filters: *setup-filter
           requires:
             - Setup
+
       - build/test_unit:
           name: Unit tests
           requires:
             - Setup
+
       -  build_local_fixed:
           name: Build
           filters:
@@ -112,6 +181,8 @@ workflows:
           requires:
             - Setup
           context: org-global
+
+
       - build/release:
           name: Release
           filters: &release
@@ -124,7 +195,9 @@ workflows:
             - Unit tests
             - Lint
           context: org-global
-      - build/github_release:
+
+
+      - github_release:
           name: GitHub Release
           requires:
             - Release
