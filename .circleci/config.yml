@@ -38,12 +38,19 @@ jobs:
 
 
             echo "Building Docker image: ${DOCKER_ORG:-mojaloop}/$SANITIZED_NAME:local with NODE_VERSION=$DOCKER_NODE_VERSION"
-            
+
             docker build -t ${DOCKER_ORG:-mojaloop}/$SANITIZED_NAME:local --build-arg NODE_VERSION=$DOCKER_NODE_VERSION .
       - run:
           name: Save docker image to workspace
           command: |
-            docker save -o /tmp/docker-image.tar ${DOCKER_ORG:-mojaloop}/$CIRCLE_PROJECT_REPONAME:local
+            # Sanitize repo name to lowercase, same logic as before
+            export SANITIZED_NAME=$(echo "$CIRCLE_PROJECT_REPONAME" \
+              | tr '[:upper:]' '[:lower:]' \
+              | tr '[:space:]' '-' \
+              | tr -cd '[:alnum:]._-' \
+              | sed 's/-*$//')
+
+            docker save -o /tmp/docker-image.tar ${DOCKER_ORG:-mojaloop}/$SANITIZED_NAME:local
       - persist_to_workspace:
           root: /tmp
           paths:
