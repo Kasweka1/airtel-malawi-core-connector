@@ -9,8 +9,7 @@ orbs:
 jobs:
   build_local_fixed:
     description: Builds a local Docker image of the project (patched version)
-    docker:
-      - image: circleci/node:alpine
+    machine: true
     environment:
       MAIN_BRANCH_NAME: main
     steps:
