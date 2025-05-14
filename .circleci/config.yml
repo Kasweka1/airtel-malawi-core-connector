@@ -29,12 +29,16 @@ jobs:
           command: |
             source $BASH_ENV
             export DOCKER_NODE_VERSION="$NVMRC_VERSION-alpine3.21"
+
             export SANITIZED_NAME=$(echo "$CIRCLE_PROJECT_REPONAME" \
-              | tr '[:upper:]' '[:lower:]' \
-              | tr '[:space:]' '-' \
-              | tr -cd '[:alnum:]._-' \
-              | sed 's/-*$//')
+            | tr '[:upper:]' '[:lower:]' \
+            | tr '[:space:]' '-' \
+            | tr -cd '[:alnum:]._-' \
+            | sed 's/-*$//')
+
+
             echo "Building Docker image: ${DOCKER_ORG:-mojaloop}/$SANITIZED_NAME:local with NODE_VERSION=$DOCKER_NODE_VERSION"
+            
             docker build -t ${DOCKER_ORG:-mojaloop}/$SANITIZED_NAME:local --build-arg NODE_VERSION=$DOCKER_NODE_VERSION .
       - run:
           name: Save docker image to workspace
