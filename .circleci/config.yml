@@ -219,14 +219,14 @@ workflows:
             - Release
           filters: *release
           context: org-global
-          
+
       - build/publish_docker: &publish-job
           name: Docker release
           context: org-global
           filters:
             branches:
-              ignore:
-                - /.*/
+              only:
+                - main
             tags:
               only: /v\d+(\.\d+){2}/
           requires:
