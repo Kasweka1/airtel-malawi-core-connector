@@ -57,10 +57,10 @@ jobs:
       - run:
           name: Setup Slack config
           command: |
-            echo "export SLACK_PROJECT_NAME=${CIRCLE_PROJECT_REPONAME}" >> $BASH_ENV
+            echo "export SLACK_PROJECT_NAME=\"${CIRCLE_PROJECT_REPONAME}\"" >> $BASH_ENV
             echo "export SLACK_RELEASE_TYPE='Github Release'" >> $BASH_ENV
-            echo "export SLACK_RELEASE_TAG=v${RELEASE_TAG}" >> $BASH_ENV
-            echo "export SLACK_RELEASE_URL=https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/v${RELEASE_TAG}" >> $BASH_ENV
+            echo "export SLACK_RELEASE_TAG=\"v${RELEASE_TAG}\"" >> $BASH_ENV
+            echo "export SLACK_RELEASE_URL=\"https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/tag/v${RELEASE_TAG}\"" >> $BASH_ENV
             echo "export SLACK_BUILD_ID=${CIRCLE_BUILD_NUM}" >> $BASH_ENV
             echo "export SLACK_CI_URL=${CIRCLE_BUILD_URL}" >> $BASH_ENV
       - run:
