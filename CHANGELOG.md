@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.2.2 (2025-05-14)
+
+
+### Bug Fixes
+
+* added  unit tests requiring setup ([d401abb](https://github.com/mojaloop/airtel-core-connector/commit/d401abbe91286451cb5e769db00703cc04e41313))
+* making of build name lowercase ([ffb589a](https://github.com/mojaloop/airtel-core-connector/commit/ffb589ab776b89419c110348e75c728fb3ff8d60))
+* making of build name lowercase ([38f38e9](https://github.com/mojaloop/airtel-core-connector/commit/38f38e94d63db9f33f0a4828e456f33b545cc903))
+* removal of trailing dash after build name ([af4f83a](https://github.com/mojaloop/airtel-core-connector/commit/af4f83a847c451dbb84efd620d75282054ef9995))
+* removed unit tests requiring setup ([79ee0b7](https://github.com/mojaloop/airtel-core-connector/commit/79ee0b7ff80ae09280f1d20be162e03d1d17add7))
+* sanitized docker save ([d0b23f3](https://github.com/mojaloop/airtel-core-connector/commit/d0b23f38d2ae53ab811304402622d1419b8e7ea4))
+* updated package.json file ([928d771](https://github.com/mojaloop/airtel-core-connector/commit/928d771b207afdcc2d1cf2cddb004b20302211a2))
+
 ### [1.2.1](https://github.com/mojaloop/airtel-core-connector/compare/v1.2.0...v1.2.1) (2024-09-10)
 
 ## [1.2.0](https://github.com/mojaloop/airtel-core-connector/compare/v1.1.10...v1.2.0) (2024-09-10)
