@@ -59,6 +59,7 @@ jobs:
           command: |
             REPO_NAME=$(basename -s .git "$(git config --get remote.origin.url)")
             GITHUB_USERNAME=$(git config --get remote.origin.url | sed -E 's|.*github\.com[:/](.*)/.*|\1|' | cut -d'/' -f1)
+
             echo "export SLACK_PROJECT_NAME=\"${REPO_NAME}\"" >> $BASH_ENV
             echo "export SLACK_RELEASE_TYPE='Github Release'" >> $BASH_ENV
             echo "export SLACK_RELEASE_TAG=\"v${RELEASE_TAG}\"" >> $BASH_ENV
@@ -68,6 +69,9 @@ jobs:
       - run:
           name: Debug GitHub release URL
           command: |
+            REPO_NAME=$(basename -s .git "$(git config --get remote.origin.url)") 
+            GITHUB_USERNAME=$(git config --get remote.origin.url | sed -E 's|.*github\.com[:/](.*)/.*|\1|' | cut -d'/' -f1)
+
             echo "Release URL will be:"
             echo "https://github.com/${GITHUB_USERNAME}/${REPO_NAME}/releases/tag/v${RELEASE_TAG}"
       - run:
@@ -77,6 +81,9 @@ jobs:
       - run:
           name: Create Release
           command: |
+            GITHUB_USERNAME=$(git config --get remote.origin.url | sed -E 's|.*github\.com[:/](.*)/.*|\1|' | cut -d'/' -f1)
+            REPO_NAME=$(basename -s .git "$(git config --get remote.origin.url)")
+            
             gh release create "v${RELEASE_TAG}" \
               --repo ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} \
               --title "v${RELEASE_TAG} Release" \
