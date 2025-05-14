@@ -100,7 +100,7 @@ workflows:
           requires:
             - Setup
       - build/test_unit:
-          name: Unit
+          name: Unit tests
           requires:
             - Setup
       -  build_local_fixed:
@@ -111,5 +111,17 @@ workflows:
                 - main
           requires:
             - Setup
+          context: org-global
+      - build/release:
+          name: Release
+          filters: &release
+            branches:
+              only:
+                - main
+                - master
+                - /release\/v.*/
+          requires:
+            - Unit tests
+            - Lint
           context: org-global
       
