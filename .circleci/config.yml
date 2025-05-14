@@ -5,6 +5,45 @@ version: 2.1
 # setup: true
 orbs:
   build: mojaloop/build@1.0.64
+
+jobs:
+  build_local_fixed:
+    description: Builds a local Docker image of the project (patched version)
+    docker:
+      - image: circleci/node:alpine
+    environment:
+      MAIN_BRANCH_NAME: main
+    steps:
+      - checkout
+      - run:
+          name: Setup .nvmrc and Node version
+          command: |
+            if [ -f .nvmrc ]; then
+              export NVMRC_VERSION=$(cat .nvmrc)
+              echo "export NVMRC_VERSION=$NVMRC_VERSION" >> $BASH_ENV
+            else
+              echo "No .nvmrc file found"
+              exit 1
+            fi
+      - run:
+          name: Build Docker local image (patched)
+          command: |
+            source $BASH_ENV
+            export DOCKER_NODE_VERSION="$NVMRC_VERSION-alpine3.21"
+            echo "Building Docker image: ${DOCKER_ORG:-mojaloop}/$CIRCLE_PROJECT_REPONAME:local with NODE_VERSION=$DOCKER_NODE_VERSION"
+            docker build -t ${DOCKER_ORG:-mojaloop}/$CIRCLE_PROJECT_REPONAME:local \
+              --build-arg NODE_VERSION=$DOCKER_NODE_VERSION \
+              .
+      - run:
+          name: Save docker image to workspace
+          command: |
+            docker save -o /tmp/docker-image.tar ${DOCKER_ORG:-mojaloop}/$CIRCLE_PROJECT_REPONAME:local
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - docker-image.tar
+
+
 workflows:
   checks:
     jobs:
@@ -51,7 +90,7 @@ workflows:
           name: Unit
           requires:
             - Setup
-      - build/build_local:
+      -  build_local_fixed:
           name: Build
           filters:
             branches:
@@ -59,4 +98,5 @@ workflows:
                 - main
           requires:
             - Setup
+          context: org-global
       
