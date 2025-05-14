@@ -219,18 +219,7 @@ workflows:
             - Release
           filters: *release
           context: org-global
-
-      - github_release:
-          name: GitHub Release
-          requires:
-            - Release
-          filters:
-            branches:
-              only:
-                - main
-                - master
-                - /release\/v.*/
-          context: org-global
+          
       - build/publish_docker: &publish-job
           name: Docker release
           context: org-global
