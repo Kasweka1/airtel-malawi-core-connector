@@ -17,7 +17,7 @@ jobs:
     parameters:
       slack:
         type: string
-        default: ''
+        default: ""
     steps:
       - run:
           name: Install Git
@@ -77,7 +77,7 @@ jobs:
       - run:
           name: Show BASH_ENV
           command: cat $BASH_ENV
-   
+
       - run:
           name: Create Release
           command: |
@@ -140,7 +140,6 @@ jobs:
           paths:
             - docker-image.tar
 
-
 workflows:
   checks:
     jobs:
@@ -160,7 +159,7 @@ workflows:
               ignore:
                 - /feature/*
                 - /bugfix/*
-            tags:  &setup-tags
+            tags: &setup-tags
               only: /v\d+(\.\d+){2}(-[a-zA-Z-][0-9a-zA-Z-]*\.\d+)?/
           context: org-global
 
@@ -191,7 +190,7 @@ workflows:
           requires:
             - Setup
 
-      -  build_local_fixed:
+      - build_local_fixed:
           name: Build
           filters:
             branches:
@@ -200,7 +199,6 @@ workflows:
           requires:
             - Setup
           context: org-global
-
 
       - build/release:
           name: Release
@@ -215,11 +213,34 @@ workflows:
             - Lint
           context: org-global
 
-
       - github_release:
           name: GitHub Release
           requires:
             - Release
           filters: *release
           context: org-global
-      
+
+      - github_release:
+          name: GitHub Release
+          requires:
+            - Release
+          filters:
+            branches:
+              only:
+                - main
+                - master
+                - /release\/v.*/
+          context: org-global
+      - build/publish_docker: &publish-job
+          name: Docker release
+          context: org-global
+          filters:
+            branches:
+              ignore:
+                - /.*/
+            tags:
+              only: /v\d+(\.\d+){2}/
+          requires:
+            - GitHub Release
+            - Build
+            - Unit tests
