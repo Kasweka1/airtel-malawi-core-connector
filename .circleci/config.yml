@@ -128,9 +128,6 @@ workflows:
           name: GitHub Release
           requires:
             - Release
-          filters:
-            branches:
-               ignore:
-                - /.*/
+          filters: *release
           context: org-global
       
