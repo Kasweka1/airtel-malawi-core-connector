@@ -77,6 +77,18 @@ jobs:
       - run:
           name: Show BASH_ENV
           command: cat $BASH_ENV
+          
+      - run:
+          name: Bump version and tag it
+          command: |
+            # Bump version (patch/minor/major — choose as needed)
+            npm version patch --no-git-tag-version
+            
+            # Extract version
+            VERSION=$(node -p "require('./package.json').version")
+            git commit -am "ci(release): bump to v$VERSION [skip ci]"
+            git tag "v$VERSION"
+            git push origin "v$VERSION"
 
       - run:
           name: Create Release
