@@ -11,6 +11,7 @@
     "test:coverage-check": "true",
     "test:unit": "jest --testMatch='**/unit/**/*.test.ts'",
     "test:xunit": "npm run test:unit",
+    "audit:check": "true",
     "test:int": "true",
     "test:unit:cov": "npm run test:unit -- --coverage",
     "prepare": "husky || true",
