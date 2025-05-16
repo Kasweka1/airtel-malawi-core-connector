@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.17](https://github.com/mojaloop/airtel-core-connector/compare/v1.2.15...v1.2.17) (2025-05-16)
+
+
+### Bug Fixes
+
+* deleted current tag ([9ab1873](https://github.com/mojaloop/airtel-core-connector/commit/9ab18736772321c8b77785b3faf9beee03ffc889))
+
 ### [1.2.15](https://github.com/mojaloop/airtel-core-connector/compare/v1.2.14...v1.2.15) (2025-05-14)
 
 ### [1.2.14](https://github.com/mojaloop/airtel-core-connector/compare/v1.2.13...v1.2.14) (2025-05-14)
