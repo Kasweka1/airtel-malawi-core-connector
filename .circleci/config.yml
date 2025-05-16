@@ -46,10 +46,10 @@ jobs:
             git fetch origin
             git checkout origin/${CIRCLE_BRANCH}
       - run:
-          name: Extract version from package (mocked)
+          name: Extract version from package.json
           command: |
-            echo 'RELEASE_TAG=1.2.3' >> $BASH_ENV
-            echo 'RELEASE_CHANGES="Minor bug fixes and improvements."' >> $BASH_ENV
+            RELEASE_TAG=$(grep '"version":' package.json | sed -E 's/.*"([0-9]+\.[0-9]+\.[0-9]+)".*/\1/')
+            echo "RELEASE_TAG=${RELEASE_TAG}" >> $BASH_ENV
       - run:
           name: Check the release changes
           command: |
