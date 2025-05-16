@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.18](https://github.com/mojaloop/airtel-core-connector/compare/v1.2.17...v1.2.18) (2025-05-16)
+
 ### [1.2.17](https://github.com/mojaloop/airtel-core-connector/compare/v1.2.15...v1.2.17) (2025-05-16)
 
 
