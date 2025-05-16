@@ -7,6 +7,7 @@
     "test": "npm run test:unit",
     "test:functional": "true",
     "test:integration": "true",
+    "test:coverage": "true",
     "test:unit": "jest --testMatch='**/unit/**/*.test.ts'",
     "test:xunit": "npm run test:unit",
     "test:int": "true",
